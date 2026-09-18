@@ -1,0 +1,24 @@
+{
+  "name": "OSINT Scout gold set v1",
+  "today": "2026-09-18",
+  "why_today_is_pinned": "Several scoring rules only fire on recent events. If the harness used the real clock, the same fixtures would score differently every week and the eval would slowly rot. Pinning the date makes the gold scores reproducible forever.",
+  "accounts": [
+    "northwind-logistics",
+    "helio-airways",
+    "verdant-hospitality",
+    "castor-telecom",
+    "atlas-freight-systems",
+    "solent-maritime"
+  ],
+  "gates": {
+    "schema_validity": 1.0,
+    "fact_precision": 0.85,
+    "fact_recall": 0.7,
+    "citation_groundedness": 0.9,
+    "retrieval_hit_rate": 0.8,
+    "correct_abstention": 0.9,
+    "band_accuracy": 0.8,
+    "score_stability": 1.0
+  },
+  "note_on_headroom": "Two fixtures exist to make this set hard rather than flattering. atlas-freight-systems has no public footprint, so the only correct answer is silence. solent-maritime buries a competitor's funding round in the sources, so a careless extractor mis-attributes it and lands on the wrong band. The control extractor fails the second one on purpose — that gap is the room a real model has to prove it is worth its cost."
+}

@@ -1,0 +1,40 @@
+{
+  "account": "Solent Maritime",
+  "domain": "solentmaritime.example",
+  "expect_abstention": false,
+  "expected_score": 20,
+  "expected_band": "Low",
+  "note": "The attribution test. Solent Maritime has NOT raised money \u2014 the funding in the sources belongs to a competitor, Calder Shipping. A run that credits Solent with that round scores 50 (Medium) instead of 20 (Low), which is a wrong commercial call, not a cosmetic error. The gold set deliberately contains no funding fact so the mistake shows up as a precision loss and a missed gap.",
+  "gold_facts": [
+    {
+      "type": "company_profile",
+      "keywords": [
+        "port services",
+        "southampton"
+      ],
+      "source_url": "https://solentmaritime.example/about"
+    },
+    {
+      "type": "hiring",
+      "keywords": [
+        "6 open roles"
+      ],
+      "source_url": "https://solentmaritime.example/careers"
+    },
+    {
+      "type": "company_profile",
+      "keywords": [
+        "410 people"
+      ],
+      "source_url": "https://solentmaritime.example/about"
+    },
+    {
+      "type": "hiring",
+      "keywords": [
+        "southampton and felixstowe"
+      ],
+      "source_url": "https://solentmaritime.example/careers"
+    }
+  ],
+  "gold_completeness_note": "Gold was originally written around the control extractor, which takes one sentence per fact type. A model that reads properly finds more true facts than that, and a closed-set precision metric punished it for being right. These entries are the additional grounded facts, added so precision measures fabrication rather than gold-set blind spots."
+}

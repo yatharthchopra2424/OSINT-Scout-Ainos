@@ -1,0 +1,86 @@
+# The process automation: refresh every watched account overnight, commit the
+# briefs, and raise an issue when an account moves up a signal band.
+#
+# Nobody has to remember to run anything. A rep opens reports/DIGEST.md on Monday
+# and sees only what changed.
+
+name: watchlist
+
+on:
+  schedule:
+    - cron: "0 2 * * 1-5"      # 02:00 UTC, weekdays
+  workflow_dispatch:
+    inputs:
+      source_mode:
+        description: "fixture (offline demo) or web (live sources)"
+        default: fixture
+        type: choice
+        options: [fixture, web]
+      extract_mode:
+        description: "baseline (no key) or llm (Nemotron)"
+        default: baseline
+        type: choice
+        options: [baseline, llm]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+
+    env:
+      NVIDIA_API_KEY: ${{ secrets.NVIDIA_API_KEY }}
+      TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY }}
+      VECTOR_BACKEND: numpy
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install fastapi "uvicorn[standard]" pydantic pydantic-settings \
+                      python-dotenv PyYAML httpx numpy \
+                      langgraph langchain-core langchain-nvidia-ai-endpoints
+
+      - name: Refresh the watchlist
+        run: |
+          python -m scripts.refresh_watchlist \
+            --source-mode "${{ inputs.source_mode || 'fixture' }}" \
+            --extract-mode "${{ inputs.extract_mode || 'baseline' }}"
+
+      - name: Commit the briefs
+        run: |
+          git config user.name  "osint-scout[bot]"
+          git config user.email "osint-scout@users.noreply.github.com"
+          git add reports/
+          git diff --staged --quiet && echo "nothing changed" && exit 0
+          git commit -m "watchlist: refresh briefs $(date -u +%Y-%m-%d)"
+          git push
+
+      - name: Raise an issue for accounts that moved up
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          count=$(jq 'length' reports/alerts.json)
+          [ "$count" -eq 0 ] && echo "no band increases" && exit 0
+
+          {
+            echo "The nightly refresh found $count account(s) whose signal band went up."
+            echo
+            jq -r '.[] | "### \(.account)\n\(.band_before) -> \(.band_after) (score \(.score))\n\n" +
+                   (.new_facts | map("- " + .) | join("\n")) + "\n"' reports/alerts.json
+            echo
+            echo "Full digest: [reports/DIGEST.md](../blob/main/reports/DIGEST.md)"
+          } > issue.md
+
+          gh issue create \
+            --title "Watchlist: $count account(s) moved up — $(date -u +%Y-%m-%d)" \
+            --body-file issue.md

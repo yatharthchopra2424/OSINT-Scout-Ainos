@@ -1,0 +1,12 @@
+{
+  "account": "Atlas Freight Systems",
+  "note": "Synthetic company with almost no public footprint. This fixture exists to test that the tool says nothing rather than inventing something.",
+  "documents": [
+    {
+      "url": "https://atlasfreight.example/",
+      "title": "Atlas Freight Systems",
+      "published": "2026-02-14",
+      "text": "Home. About. Services. Contact us. Careers. Privacy policy. Terms of service. Copyright 2026 Atlas Freight Systems. All rights reserved."
+    }
+  ]
+}

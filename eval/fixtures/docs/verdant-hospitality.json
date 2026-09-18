@@ -1,0 +1,24 @@
+{
+  "account": "Verdant Hospitality",
+  "note": "Synthetic company. Nothing here describes a real business.",
+  "documents": [
+    {
+      "url": "https://verdanthospitality.example/about",
+      "title": "About Verdant Hospitality",
+      "published": "2026-03-05",
+      "text": "Verdant Hospitality is a hotel group running 61 mid-market properties across Spain and Portugal. The group provides managed accommodation, food and beverage, and conference services. Head office is in Madrid."
+    },
+    {
+      "url": "https://travelpress.example/verdant-booking-platform",
+      "title": "Verdant signs distribution deal",
+      "published": "2026-04-10",
+      "text": "Verdant Hospitality partners with a regional booking platform to distribute rooms, announced 2026-04-10. The arrangement covers all 61 properties and starts in the summer season."
+    },
+    {
+      "url": "https://verdanthospitality.example/technology",
+      "title": "Systems at Verdant Hospitality",
+      "published": "",
+      "text": "Verdant Hospitality uses a legacy property management system that the group has said it intends to replace within two years. Reporting is done in spreadsheets."
+    }
+  ]
+}

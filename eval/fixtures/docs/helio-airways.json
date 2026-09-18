@@ -1,0 +1,30 @@
+{
+  "account": "Helio Airways",
+  "note": "Synthetic company. Nothing here describes a real business.",
+  "documents": [
+    {
+      "url": "https://helioairways.example/about",
+      "title": "About Helio Airways",
+      "published": "2026-02-20",
+      "text": "Helio Airways is a regional carrier based in Lisbon, flying 34 aircraft on short-haul routes across southern Europe. The airline was founded in 2011 and carries about 9 million passengers a year."
+    },
+    {
+      "url": "https://aviationpress.example/helio-cio",
+      "title": "Helio Airways names new CIO",
+      "published": "2026-08-25",
+      "text": "Helio Airways appointed Marta Ferreira as Chief Information Officer on 2026-08-25. Ferreira arrives from a European rail operator and will lead a three-year systems modernisation. The role reports directly to the chief executive."
+    },
+    {
+      "url": "https://aviationpress.example/helio-rebooking-app",
+      "title": "Helio launches self-service rebooking",
+      "published": "2026-09-01",
+      "text": "Helio Airways launched a self-service rebooking app for disrupted passengers on 2026-09-01. The airline said the app handles delays, cancellations and seat changes without a call centre agent."
+    },
+    {
+      "url": "https://helioairways.example/technology",
+      "title": "Technology at Helio Airways",
+      "published": "",
+      "text": "Helio Airways runs on an Amadeus passenger service system, with a cloud data warehouse for operations reporting. Engineering work is split between Lisbon and Porto."
+    }
+  ]
+}

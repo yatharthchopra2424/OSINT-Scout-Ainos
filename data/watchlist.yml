@@ -1,0 +1,28 @@
+# The accounts OSINT Scout monitors.
+# The nightly GitHub Action re-runs every account in this file and reports
+# what changed. Add or remove accounts here, or from the Watchlist tab in the UI.
+#
+# name   - what we call the company
+# domain - its website (used by the web source; ignored in fixture mode)
+# notes  - free text for the rep
+
+accounts:
+  - name: Northwind Logistics
+    domain: northwind-logistics.example
+    notes: Freight forwarder, expanding into air cargo.
+
+  - name: Helio Airways
+    domain: helioairways.example
+    notes: Regional carrier, new CIO hired.
+
+  - name: Verdant Hospitality
+    domain: verdanthospitality.example
+    notes: Hotel group, mid-market.
+
+  - name: Castor Telecom
+    domain: castortelecom.example
+    notes: Telco, ran layoffs last quarter.
+
+  - name: Atlas Freight Systems
+    domain: atlasfreight.example
+    notes: Quiet account, little public footprint.

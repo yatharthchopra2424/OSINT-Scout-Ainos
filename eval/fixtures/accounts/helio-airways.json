@@ -1,0 +1,29 @@
+{
+  "account": "Helio Airways",
+  "domain": "helioairways.example",
+  "expect_abstention": false,
+  "expected_score": 50,
+  "expected_band": "Medium",
+  "gold_facts": [
+    {
+      "type": "company_profile",
+      "keywords": ["regional carrier", "lisbon"],
+      "source_url": "https://helioairways.example/about"
+    },
+    {
+      "type": "leadership_change",
+      "keywords": ["marta ferreira", "chief information officer"],
+      "source_url": "https://aviationpress.example/helio-cio"
+    },
+    {
+      "type": "product_launch",
+      "keywords": ["rebooking app"],
+      "source_url": "https://aviationpress.example/helio-rebooking-app"
+    },
+    {
+      "type": "tech_stack",
+      "keywords": ["amadeus"],
+      "source_url": "https://helioairways.example/technology"
+    }
+  ]
+}

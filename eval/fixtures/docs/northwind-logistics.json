@@ -1,0 +1,36 @@
+{
+  "account": "Northwind Logistics",
+  "note": "Synthetic company. Nothing here describes a real business.",
+  "documents": [
+    {
+      "url": "https://northwind-logistics.example/about",
+      "title": "About Northwind Logistics",
+      "published": "2026-01-12",
+      "text": "Northwind Logistics is a freight forwarder headquartered in Rotterdam, operating ocean and road freight across 14 countries. The company was founded in 2004 and employs around 2,300 people. Northwind Logistics provides customs brokerage, warehousing and last-mile delivery to retail and industrial customers."
+    },
+    {
+      "url": "https://tradepress.example/northwind-series-b",
+      "title": "Northwind Logistics raises 42 million in Series B",
+      "published": "2026-06-10",
+      "text": "Northwind Logistics raised 42 million euro in a Series B round on 2026-06-10. The round was led by Meridian Capital with participation from existing investors. Northwind said the money will pay for air cargo capacity and a new warehouse management system."
+    },
+    {
+      "url": "https://tradepress.example/northwind-singapore",
+      "title": "Northwind opens Singapore office",
+      "published": "2026-08-02",
+      "text": "Northwind Logistics expands into South East Asia with a new office in Singapore, announced on 2026-08-02. The move follows growing demand for air freight between Europe and Asia. Northwind said the Singapore team will start with 40 staff."
+    },
+    {
+      "url": "https://northwind-logistics.example/careers",
+      "title": "Careers at Northwind Logistics",
+      "published": "2026-07-15",
+      "text": "Northwind Logistics is hiring across technology and operations, with 38 open roles listed on 2026-07-15. Vacancies include data engineers, integration specialists and a head of automation. Most roles are based in Rotterdam and Singapore."
+    },
+    {
+      "url": "https://tradepress.example/northwind-portlink",
+      "title": "Northwind and PortLink sign tracking deal",
+      "published": "2026-05-20",
+      "text": "Northwind Logistics partners with PortLink to integrate real-time container tracking, announced 2026-05-20. The agreement covers nine ports in Europe. PortLink said the arrangement will extend to Asian ports next year."
+    }
+  ]
+}

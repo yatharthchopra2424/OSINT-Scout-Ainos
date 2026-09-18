@@ -1,0 +1,34 @@
+{
+  "account": "Northwind Logistics",
+  "domain": "northwind-logistics.example",
+  "expect_abstention": false,
+  "expected_score": 75,
+  "expected_band": "High",
+  "gold_facts": [
+    {
+      "type": "company_profile",
+      "keywords": ["freight forwarder", "rotterdam"],
+      "source_url": "https://northwind-logistics.example/about"
+    },
+    {
+      "type": "funding",
+      "keywords": ["42 million", "series b"],
+      "source_url": "https://tradepress.example/northwind-series-b"
+    },
+    {
+      "type": "market_expansion",
+      "keywords": ["south east asia", "singapore"],
+      "source_url": "https://tradepress.example/northwind-singapore"
+    },
+    {
+      "type": "hiring",
+      "keywords": ["38 open roles"],
+      "source_url": "https://northwind-logistics.example/careers"
+    },
+    {
+      "type": "partnership",
+      "keywords": ["portlink"],
+      "source_url": "https://tradepress.example/northwind-portlink"
+    }
+  ]
+}

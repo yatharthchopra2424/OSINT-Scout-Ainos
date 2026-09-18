@@ -1,0 +1,9 @@
+{
+  "account": "Atlas Freight Systems",
+  "domain": "atlasfreight.example",
+  "expect_abstention": true,
+  "expected_score": 0,
+  "expected_band": "Low",
+  "note": "The abstention test. There is nothing in the source but navigation text. A correct run produces no facts and reports gaps. Any fact at all here is a hallucination.",
+  "gold_facts": []
+}

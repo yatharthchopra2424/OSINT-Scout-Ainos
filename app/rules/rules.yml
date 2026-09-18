@@ -1,0 +1,62 @@
+# Buying-signal scoring rules.
+#
+# The language model does NOT produce the score. It extracts facts; this file
+# decides what they are worth. That means every point in a score traces back to a
+# rule and a source URL, the weights can be tuned without touching code, and the
+# same facts always produce the same number.
+#
+# Each rule matches on a fact `type`, optionally requiring the fact to be recent.
+
+bands:
+  Low: 0        # 0  - 30
+  Medium: 31    # 31 - 60
+  High: 61      # 61 +
+
+rules:
+  - name: recent_funding
+    fact_type: funding
+    within_days: 180
+    points: 30
+    because: Fresh capital means budget to spend.
+
+  - name: leadership_change
+    fact_type: leadership_change
+    within_days: 90
+    points: 25
+    because: New leaders re-evaluate vendors in their first two quarters.
+
+  - name: hiring_surge
+    fact_type: hiring
+    within_days: 180
+    points: 20
+    because: Open roles signal an expanding function with new problems to solve.
+
+  - name: product_launch
+    fact_type: product_launch
+    within_days: 90
+    points: 15
+    because: A launch creates operational load they may need help with.
+
+  - name: market_expansion
+    fact_type: market_expansion
+    within_days: 180
+    points: 15
+    because: New markets need new systems and local support.
+
+  - name: partnership
+    fact_type: partnership
+    within_days: 180
+    points: 10
+    because: An alliance footprint shows appetite to work with outside vendors.
+
+  - name: tech_overlap
+    fact_type: tech_stack
+    within_days: null      # undated facts are allowed to fire this rule
+    points: 10
+    because: A known stack means a shorter integration conversation.
+
+  - name: layoffs
+    fact_type: layoffs
+    within_days: 90
+    points: -20
+    because: Cost-cutting usually freezes new vendor spend.

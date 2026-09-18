@@ -1,0 +1,24 @@
+{
+  "account": "Solent Maritime",
+  "note": "Synthetic company. This fixture is a trap: one source document is mostly about a COMPETITOR's funding round. A careless extractor will attribute that money to Solent Maritime, which inflates the signal score and changes the commercial decision. That is the single most common failure mode in account research, so the gold set treats it as the headline test.",
+  "documents": [
+    {
+      "url": "https://solentmaritime.example/about",
+      "title": "About Solent Maritime",
+      "published": "2026-03-01",
+      "text": "Solent Maritime is a port services company based in Southampton, handling vessel agency and bunkering for container lines. The business employs 410 people across four UK ports."
+    },
+    {
+      "url": "https://shippingpress.example/calder-series-c",
+      "title": "Calder Shipping closes Series C",
+      "published": "2026-07-14",
+      "text": "Rival firm Calder Shipping raised 60 million euro in a Series C round on 2026-07-14. Solent Maritime was not involved in the transaction and declined to comment. Analysts said consolidation across UK port services is likely to continue into next year."
+    },
+    {
+      "url": "https://solentmaritime.example/careers",
+      "title": "Careers at Solent Maritime",
+      "published": "2026-06-20",
+      "text": "Solent Maritime is hiring for 6 open roles in vessel operations, listed on 2026-06-20. Positions are split between Southampton and Felixstowe."
+    }
+  ]
+}

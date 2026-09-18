@@ -1,0 +1,20 @@
+.env
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# runtime state
+.cache/
+.chroma/
+data/runs/
+eval/results/
+data/leads.json
+
+# editor / tooling config, not part of the project
+.claude/
+.vscode/
+.idea/
+
+# internal planning notes, not for the public repo
+PLAN.md

@@ -1,0 +1,40 @@
+{
+  "account": "Castor Telecom",
+  "domain": "castortelecom.example",
+  "expect_abstention": false,
+  "expected_score": 0,
+  "expected_band": "Low",
+  "note": "Exercises the negative rule: recent layoffs cancel out a hiring signal.",
+  "gold_facts": [
+    {
+      "type": "company_profile",
+      "keywords": [
+        "telecommunications operator",
+        "11 million"
+      ],
+      "source_url": "https://castortelecom.example/about"
+    },
+    {
+      "type": "layoffs",
+      "keywords": [
+        "900 roles"
+      ],
+      "source_url": "https://telecompress.example/castor-restructuring"
+    },
+    {
+      "type": "hiring",
+      "keywords": [
+        "12 open roles"
+      ],
+      "source_url": "https://castortelecom.example/careers"
+    },
+    {
+      "type": "company_profile",
+      "keywords": [
+        "three countries"
+      ],
+      "source_url": "https://castortelecom.example/about"
+    }
+  ],
+  "gold_completeness_note": "Gold was originally written around the control extractor, which takes one sentence per fact type. A model that reads properly finds more true facts than that, and a closed-set precision metric punished it for being right. These entries are the additional grounded facts, added so precision measures fabrication rather than gold-set blind spots."
+}

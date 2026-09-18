@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OSINT Scout</title>
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+
+<header>
+  <h1>OSINT Scout <span>account monitoring for Sales &amp; Alliances</span></h1>
+  <button class="help" id="helpBtn" title="Replay the tutorial">?</button>
+  <div class="chips" id="chips"></div>
+</header>
+
+<nav>
+  <button data-tab="pipeline" class="active">Agent</button>
+  <button data-tab="deals">Pipeline</button>
+  <button data-tab="watchlist">Watchlist</button>
+  <button data-tab="briefs">Briefs</button>
+  <button data-tab="logs">Logs</button>
+  <button data-tab="rules">Rules</button>
+  <button data-tab="evaluation">Eval</button>
+</nav>
+
+<main>
+
+<!-- ─────────────────────────── PIPELINE ─────────────────────────── -->
+<section id="pipeline" class="active">
+  <div class="panel">
+    <h2>The agent, one node at a time</h2>
+    <p class="hint">
+      A run walks these eight steps in order. Three of them involve no model at all —
+      the model reads and extracts, plain Python decides and reports. If the verify
+      gate keeps fewer than three facts, the graph loops back to retrieve once with a
+      wider k, and only once.
+    </p>
+    <div class="pipeline" id="pipelineSteps"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Model check</h2>
+    <p class="hint">
+      Calls the chat model and the embedding model for real and reports what came back.
+      With no NVIDIA API key the app still runs end to end on its control extractor and
+      lexical embeddings — that is what lets the eval harness run in CI with no secrets.
+    </p>
+    <button class="act" id="smokeBtn">Run model check</button>
+    <span class="status" id="smokeStatus"></span>
+    <pre class="out" id="smokeOut" style="margin-top:12px; display:none"></pre>
+  </div>
+</section>
+
+<!-- ─────────────────────────── PIPELINE (deals) ─────────────────────────── -->
+<section id="deals">
+  <div class="panel">
+    <h2>Pipeline</h2>
+    <p class="hint">
+      Where every account stands and what has been done about it. A brief tells you
+      what is true about a company; a lead tells you what you did next. Every entry
+      on an account's timeline is written automatically by the system — researching
+      an account moves it to Researched on its own, and drafting an email logs itself.
+    </p>
+    <div class="stageflow" id="stageFlow"></div>
+    <div class="kpis" id="pipeKpis"></div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <h2>Needs attention</h2>
+      <p class="hint">Open accounts with no activity for two weeks. The list a rep opens first.</p>
+      <div id="staleList"></div>
+    </div>
+    <div class="panel">
+      <h2>Moved up this week</h2>
+      <p class="hint">Accounts whose signal band rose on their most recent run — a reason to get back in touch.</p>
+      <div id="moversList"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Stage conversion</h2>
+    <p class="hint">
+      Measured on the furthest stage each account ever reached, so a deal that was
+      contacted and then lost still counts as having been contacted.
+    </p>
+    <table><thead><tr><th>Transition</th><th class="num">Reached</th><th class="num">Of</th><th class="num">Rate</th></tr></thead>
+      <tbody id="convBody"></tbody></table>
+  </div>
+
+  <div class="panel">
+    <h2>Accounts</h2>
+    <p class="hint">
+      Change a stage here. Drafting an email deliberately does not advance a lead to
+      Contacted — only you know whether it was actually sent.
+    </p>
+    <table><thead><tr>
+      <th>Company</th><th style="width:140px">Stage</th><th style="width:120px">Owner</th>
+      <th class="num">Score</th><th>Band</th><th class="num">Idle</th><th>Last run</th><th></th>
+    </tr></thead><tbody id="leadsBody"></tbody></table>
+    <div id="leadTimeline"></div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── WATCHLIST ─────────────────────────── -->
+<section id="watchlist">
+  <div class="panel">
+    <h2>Run an account</h2>
+    <p class="hint">
+      Runs happen in the background. Fixture sources with the control extractor finish
+      in under a second; with the <code>llm</code> extractor a run takes
+      <b>about seven minutes</b> — the reasoning model is slow. You can leave this tab,
+      reload the page, or watch the nodes execute below.
+    </p>
+    <div class="row">
+      <div><label>Company</label><input id="runName" placeholder="Northwind Logistics"></div>
+      <div><label>Domain (web mode only)</label><input id="runDomain" placeholder="example.com"></div>
+      <div style="max-width:150px">
+        <label>Sources</label>
+        <select id="runSource"><option value="fixture">fixture</option><option value="web">web</option></select>
+      </div>
+      <div style="max-width:150px">
+        <label>Extractor</label>
+        <select id="runExtract"><option value="llm">llm</option><option value="baseline">baseline</option></select>
+      </div>
+      <div style="max-width:160px">
+        <label>Embeddings</label>
+        <select id="runEmbed"><option value="lexical">lexical</option><option value="nemotron">nemotron</option></select>
+      </div>
+      <button class="act" id="runBtn">Run</button>
+    </div>
+    <span class="status" id="runStatus"></span>
+    <div id="runProgress"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Watchlist</h2>
+    <p class="hint">
+      The accounts the nightly GitHub Action re-runs. This edits
+      <code>data/watchlist.yml</code> directly, so the UI and the scheduled job always
+      agree on what is being monitored.
+    </p>
+    <div class="row">
+      <div><label>Company</label><input id="wlName" placeholder="Company name"></div>
+      <div><label>Domain</label><input id="wlDomain" placeholder="example.com"></div>
+      <div><label>Notes</label><input id="wlNotes" placeholder="Why we care"></div>
+      <button class="act" id="wlAdd">Add</button>
+    </div>
+    <table><thead><tr>
+      <th>Company</th><th>Domain</th><th>Notes</th><th style="width:160px"></th>
+    </tr></thead><tbody id="wlBody"></tbody></table>
+  </div>
+
+  <div class="panel">
+    <h2>Digest — latest run per account</h2>
+    <p class="hint">
+      The Monday-morning view: where each account stands now, and which way it moved
+      since the run before.
+    </p>
+    <table><thead><tr>
+      <th>Company</th><th class="num">Score</th><th>Band</th><th>Moved</th>
+      <th class="num">New facts</th><th>Last run</th>
+    </tr></thead><tbody id="digestBody"></tbody></table>
+  </div>
+</section>
+
+<!-- ─────────────────────────── BRIEFS ─────────────────────────── -->
+<section id="briefs">
+  <div class="panel">
+    <h2>Runs</h2>
+    <p class="hint">Pick a run to read its brief and draft outreach from it.</p>
+    <div class="toolbar">
+      <input type="search" id="runFilter" placeholder="Filter by company…">
+      <label class="toggle"><input type="checkbox" id="showAllRuns"> Show every run, not just the latest per account</label>
+      <span class="count" id="runCount"></span>
+    </div>
+    <table><thead><tr>
+      <th>Company</th><th>Run</th><th class="num">Facts</th><th class="num">Dropped</th>
+      <th class="num">Score</th><th>Band</th><th>Moved</th><th>Generated</th>
+    </tr></thead><tbody id="runsBody"></tbody></table>
+  </div>
+  <div id="briefDetail"></div>
+</section>
+
+<!-- ─────────────────────────── LOGS ─────────────────────────── -->
+<section id="logs">
+  <div class="panel">
+    <h2>Run log</h2>
+    <p class="hint">
+      One JSON line per event, written by the nodes as they execute. This is the audit
+      trail: which node saw what, how long it took, and the reason every dropped fact
+      was dropped.
+    </p>
+    <div class="row">
+      <div><label>Run</label><select id="logRun"></select></div>
+      <button class="ghost" id="logRefresh">Reload</button>
+    </div>
+    <div class="log" id="logBody"></div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── RULES ─────────────────────────── -->
+<section id="rules">
+  <div class="panel">
+    <h2>Scoring rules</h2>
+    <p class="hint">
+      The language model never produces the score. It extracts facts; this file decides
+      what they are worth. Every point in a score traces back to a rule here and to the
+      URL the fact came from, and the same facts always produce the same number. Edit
+      and save — it is validated before it is written.
+    </p>
+    <textarea id="rulesText" spellcheck="false"></textarea>
+    <div class="row" style="margin-top:12px">
+      <button class="act" id="rulesSave">Save rules</button>
+      <button class="ghost" id="rulesReload">Discard changes</button>
+      <span class="status" id="rulesStatus"></span>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────── EVAL ─────────────────────────── -->
+<section id="evaluation">
+  <div class="panel">
+    <h2>Eval harness</h2>
+    <p class="hint">
+      Runs the pipeline against a frozen gold set — six synthetic accounts, no network.
+      Each account runs three times: once to measure, twice more to prove the result is
+      stable and that an identical re-run reports no phantom changes. The same command
+      runs in GitHub Actions on every push, and a failed gate fails the build.
+    </p>
+    <div class="row">
+      <div style="max-width:170px">
+        <label>Extractor</label>
+        <select id="evalExtract"><option value="baseline">baseline</option><option value="llm">llm</option></select>
+      </div>
+      <div style="max-width:180px">
+        <label>Embeddings</label>
+        <select id="evalEmbed"><option value="lexical">lexical</option><option value="nemotron">nemotron</option></select>
+      </div>
+      <button class="act" id="evalRun">Run eval</button>
+      <span class="status" id="evalStatus"></span>
+    </div>
+    <p class="note">
+      Two fixtures exist to stop this being a flattering test.
+      <b>Atlas Freight Systems</b> has no public footprint, so the only correct answer is
+      silence. <b>Solent Maritime</b> buries a competitor's funding round in its sources —
+      credit that money to Solent and the band flips from Low to Medium, which is a wrong
+      commercial call, not a cosmetic one.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2>Results</h2>
+    <div id="evalResults"><div class="empty">No eval has been run yet.</div></div>
+  </div>
+
+  <div class="panel" id="evalOutPanel" style="display:none">
+    <h2>Harness output</h2>
+    <pre class="out" id="evalOut"></pre>
+  </div>
+</section>
+
+</main>
+
+<div id="tour"></div>
+<script src="/static/app.js"></script>
+</body>
+</html>

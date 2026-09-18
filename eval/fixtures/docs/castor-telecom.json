@@ -1,0 +1,24 @@
+{
+  "account": "Castor Telecom",
+  "note": "Synthetic company. Nothing here describes a real business.",
+  "documents": [
+    {
+      "url": "https://castortelecom.example/about",
+      "title": "About Castor Telecom",
+      "published": "2026-01-30",
+      "text": "Castor Telecom is a telecommunications operator selling mobile and fixed broadband to 11 million subscribers. The company runs networks in three countries from a head office in Warsaw."
+    },
+    {
+      "url": "https://telecompress.example/castor-restructuring",
+      "title": "Castor Telecom confirms network restructuring",
+      "published": "2026-08-05",
+      "text": "Castor Telecom confirmed layoffs of 900 roles on 2026-08-05 as part of a restructuring of its network division. The company said the cuts follow a review of capital spending."
+    },
+    {
+      "url": "https://castortelecom.example/careers",
+      "title": "Careers at Castor Telecom",
+      "published": "2026-07-01",
+      "text": "Castor Telecom is hiring for 12 open roles in its data and analytics team, listed on 2026-07-01. The team sits inside the group technology function."
+    }
+  ]
+}

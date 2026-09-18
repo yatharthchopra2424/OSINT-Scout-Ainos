@@ -1,0 +1,57 @@
+# Regression-test the agent on every change.
+#
+# The harness runs against frozen documents in eval/fixtures — no network, no API
+# key, no flakiness — so a pull request that makes extraction worse fails the build
+# instead of quietly shipping. That is the whole point of this file.
+
+name: eval
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  gold-set:
+    runs-on: ubuntu-latest
+
+    env:
+      # No secrets needed: the control extractor and lexical embeddings run offline.
+      SOURCE_MODE: fixture
+      EXTRACT_MODE: baseline
+      EMBED_BACKEND: lexical
+      VECTOR_BACKEND: numpy      # skip the chromadb build in CI; same interface
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install fastapi "uvicorn[standard]" pydantic pydantic-settings \
+                      python-dotenv PyYAML httpx numpy \
+                      langgraph langchain-core langchain-nvidia-ai-endpoints
+
+      - name: Run the gold set
+        run: python -m eval.run_eval --extract-mode baseline --embed-backend lexical
+
+      - name: Publish the summary
+        if: always()
+        run: |
+          latest=$(ls -d eval/results/run_* | tail -n 1)
+          echo "### Eval — \`$latest\`" >> "$GITHUB_STEP_SUMMARY"
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat "$latest/_summary.json" >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-results
+          path: eval/results/
