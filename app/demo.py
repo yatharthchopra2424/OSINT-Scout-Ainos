@@ -112,8 +112,8 @@ def seed_in_background() -> None:
 # what a visitor is not allowed to do
 # ---------------------------------------------------------------------------
 READ_ONLY_MESSAGE = (
-    "This is a read-only demo deployment. Clone the repository to run it with your "
-    "own accounts, rules and API keys."
+    "This is a read-only demo deployment. Model calls, live web, rule editing and the "
+    "eval launcher are disabled."
 )
 
 MAX_OWNER_LENGTH = 40

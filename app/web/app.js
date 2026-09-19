@@ -41,14 +41,10 @@ document.querySelectorAll('nav button').forEach((btn) => {
    visitor click into a 403. The server enforces all of this independently. */
 function applyDemoMode(h) {
   const banner = $('demoBanner');
-  banner.className = 'demo-banner';
-  banner.style.display = 'block';
-  banner.innerHTML = h.seeding
-    ? '<b>Public demo.</b> Loading the synthetic accounts, this takes a few seconds. Reload shortly.'
-    : '<b>Public read-only demo</b> running on synthetic companies. Model calls, live web, rule editing '
-      + 'and the eval launcher are switched off here. '
-      + '<a href="https://github.com/yatharthchopra2424/OSINT-Scout-Ainos" target="_blank" rel="noopener">'
-      + 'Clone the repository</a> to run it with your own accounts and keys.';
+  if (banner) {
+    banner.style.display = 'none';
+    banner.innerHTML = '';
+  }
 
   // Extractor / sources / embeddings: only the deterministic path exists here.
   for (const [id, value] of [['runExtract', 'baseline'], ['runSource', 'fixture'], ['runEmbed', 'lexical'],
