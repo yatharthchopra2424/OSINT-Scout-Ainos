@@ -44,6 +44,7 @@ https://github.com/user-attachments/assets/2165fe36-bd77-448c-be71-d61695280f57
   - [9. Tutorial — first run](#9-tutorial--first-run)
 - [Architecture](#architecture)
 - [The eval harness](#the-eval-harness)
+- [Deploy on Render](#deploy-on-render-free)
 - [Automation with GitHub Actions](#automation-with-github-actions)
 - [Models](#models)
 - [Scope guardrail](#scope-guardrail)
@@ -133,7 +134,7 @@ the system is working.
 python -m pytest tests -q
 ```
 
-46 tests covering the parts where a silent mistake changes a commercial answer:
+63 tests covering the parts where a silent mistake changes a commercial answer:
 the scoring rules, the style and claim checks, the date back-fill, the model-reply
 parser and the boilerplate filter. No network, no key, under a second.
 
@@ -557,6 +558,8 @@ mistake would not show up as an obvious failure:
 |---|---|
 | `tests/test_rules_engine.py` | Rules fire inside their window and not outside; undated facts cannot fire a time-windowed rule; layoffs cancel a hiring signal; the score floors at zero; a rule fires at most once; band boundaries; determinism |
 | `tests/test_style.py` | Grounded email scores well; stock phrasing is punished; a grammatical but generic email still fails; a number with no supporting fact is flagged; meeting times are not mistaken for claims |
+| `tests/test_demo_mode.py` | The public demo refuses rule edits, watchlist edits and the eval launcher; only bundled companies run; models stay off even with a key present; an owner name is length-capped |
+| `tests/test_diff.py` | The same event reworded is not a change; different amounts are different events; figures are decisive |
 | `tests/test_extract_dates.py` | Dates read from the sentence, the quote, then the cited page's publication date; an existing date is never overwritten; genuinely undated facts are left alone |
 | `tests/test_model_output.py` | JSON recovered from fences, prose, thinking tags, braces inside strings and replies cut off mid-object; a 401 is not mistaken for an unsupported-feature 400; boilerplate filtering |
 
@@ -591,6 +594,54 @@ reasoning leaks into the answer. Sending `chat_template_kwargs={"thinking": fals
 took one identical prompt from **7.4s to 1.0s** on Super and **28.8s to 5.8s** on
 Lightning, and stopped Lightning replying with "Here's a thinking process:" instead of
 the JSON. End to end this took a full account run from **446 seconds to 36**.
+
+---
+
+## Deploy on Render (free)
+
+The repository includes a Render Blueprint, `render.yaml`, that deploys a **read-only
+public demo**. There are no secrets to enter.
+
+**Steps**
+
+1. Fork or use this repository on your own GitHub account
+2. In Render, choose **New**, then **Blueprint**, and select the repository
+3. Confirm the plan is **Free** and press **Apply**
+4. Wait for the build, then open the `onrender.com` URL Render assigns
+
+**What the demo does on startup**
+
+- Runs the eval harness once, so the Eval tab has results
+- Runs the six synthetic accounts and spreads them across pipeline stages
+- Backdates one account so the *Needs attention* panel has something in it
+- Takes a few seconds, and repeats after every restart because the free disk is not persistent
+
+**What is switched off, and why**
+
+| Locked | Reason |
+|---|---|
+| All model calls | A public URL must not be able to spend an API key |
+| Live web sources | Same reason, and the demo needs no network |
+| Editing `rules.yml` | It would change the scoring for every other visitor |
+| Editing the watchlist | Shared state |
+| Launching the eval | CPU cost, and it rewrites shared state |
+| Running any company but the six bundled ones | Nothing else has documents to read |
+
+The server enforces all of this. The interface greys the controls out only so a
+visitor is not left clicking into an error. A request that asks for the model, the live
+web or an unknown company is overridden to the safe path rather than trusted.
+
+**Free tier behaviour to expect**
+
+- The service sleeps after about 15 minutes idle, and the first visit afterwards takes
+  30 to 50 seconds to wake
+- Memory is 512 MB. `requirements-render.txt` leaves out Chroma and the NVIDIA client
+  for this reason; the vector store falls back to the built-in NumPy one
+- Stored runs are capped so repeated clicking cannot grow the disk without limit
+
+**Running the full version instead.** The demo is deliberately the reduced one. To use
+Nemotron and live sources, run it locally or deploy privately, and put authentication in
+front of it first: the full version has no login.
 
 ---
 
@@ -683,6 +734,7 @@ app/
   schemas/brief.py     the data contract
   prompts/*.md         versioned prompts, one per stage — diffable in a PR
   rules/rules.yml      the scoring rules
+  demo.py              public-demo mode: startup seeding and the read-only guards
   ops/                 run_log · store · watchlist · leads · jobs
   outreach/            intents · drafter (2-hop grounded) · style (the checker)
   web/                 the console — plain HTML/CSS/JS, no build step
@@ -690,12 +742,14 @@ eval/
   fixtures/            6 synthetic accounts, frozen documents, gold facts
   metrics.py           scoring, re-checked independently of the pipeline
   run_eval.py          the harness
-tests/                 46 unit tests — rules, style, dates, model-reply parsing
+tests/                 unit tests — rules, style, dates, model-reply parsing
 scripts/
   refresh_watchlist.py what the nightly Action runs
   capture_screens.py   regenerates the screenshots in this README
 docs/screenshots/      the images above
 .github/workflows/     eval.yml · watchlist.yml
+render.yaml            one-click free deploy of the read-only demo
+requirements-render.txt  slim dependencies for the 512 MB free tier
 ```
 
 **Cost to run:** $0. NVIDIA NIM free tier, Tavily free tier, Chroma local, GitHub

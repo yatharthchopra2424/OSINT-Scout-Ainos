@@ -37,8 +37,13 @@ RETRYABLE = ("503", "429", "overloaded", "timeout", "temporarily", "rate limit")
 
 
 def available() -> bool:
-    """True when we can actually call NVIDIA NIM."""
-    return settings.has_nvidia_key
+    """True when we can actually call NVIDIA NIM.
+
+    Demo mode returns False even if a key is present. Every model path in the
+    codebase is gated on this one function, so a public deployment cannot spend a
+    key by accident — there is no second place to remember to check.
+    """
+    return settings.has_nvidia_key and not settings.demo_mode
 
 
 def call(runnable, payload, attempts: int = RETRY_ATTEMPTS):

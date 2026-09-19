@@ -18,3 +18,9 @@ data/leads.json
 
 # internal planning notes, not for the public repo
 PLAN.md
+
+# personal files that must never be published
+*.mp4
+*.mov
+*.docx
+.pytest_cache/

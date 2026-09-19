@@ -36,6 +36,10 @@ class Settings(BaseSettings):
     support_threshold: float = 0.5
     summary_model: str = "template"      # template | llm
 
+    # Public demo deployment: no model calls, no live web, nothing that spends
+    # a key or mutates shared configuration. See app/demo.py.
+    demo_mode: bool = False
+
     model_config = SettingsConfigDict(env_file=str(ROOT / ".env"), extra="ignore")
 
     # --- derived paths ------------------------------------------------------

@@ -9,12 +9,14 @@ eval harness. If it happens in the backend, there is a tab for it.
 import json
 import subprocess
 import sys
+from contextlib import asynccontextmanager
 
 import yaml
 from fastapi import Body, FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 
+from app import demo
 from app.config import ROOT, settings
 from app.graph import GRAPH_SHAPE, run_account
 from app.llm import clients
@@ -25,13 +27,35 @@ from app.rules.engine import load_rules
 from app.sources import fixtures
 from app.sources.fixtures import account_slug
 
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    """On the public demo, fill the empty disk before anyone looks at it."""
+    if settings.demo_mode:
+        demo.seed_in_background()
+    yield
+
+
 app = FastAPI(
     title="OSINT Scout",
     description="Account monitoring agent for Sales & Alliances.",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 WEB_DIR = ROOT / "app" / "web"
+
+
+def read_only() -> None:
+    """Refuse a change that would alter shared state on the public demo.
+
+    Called by every endpoint that edits the rules, the watchlist, or launches
+    something expensive. One function, one message — so the UI can show the reason
+    verbatim rather than a generic 403.
+    """
+    if settings.demo_mode:
+        raise HTTPException(403, demo.READ_ONLY_MESSAGE)
+
+
 
 
 # ---------------------------------------------------------------------------
@@ -49,6 +73,9 @@ def health() -> dict:
         "support_threshold": settings.support_threshold,
         "retrieval_k": settings.retrieval_k,
         "fixture_accounts": fixtures.available_accounts(),
+        "demo_mode": settings.demo_mode,
+        "seeding": demo.status()["seeding"],
+        "seed_error": demo.status()["error"],
     }
 
 
@@ -74,6 +101,7 @@ def get_watchlist() -> list[dict]:
 
 @app.post("/api/watchlist", tags=["watchlist"])
 def add_to_watchlist(payload: dict = Body(...)) -> list[dict]:
+    read_only()
     name = (payload.get("name") or "").strip()
     if not name:
         raise HTTPException(400, "name is required")
@@ -82,6 +110,7 @@ def add_to_watchlist(payload: dict = Body(...)) -> list[dict]:
 
 @app.delete("/api/watchlist/{name}", tags=["watchlist"])
 def remove_from_watchlist(name: str) -> list[dict]:
+    read_only()
     return watchlist.remove(name)
 
 
@@ -101,18 +130,31 @@ def create_run(payload: dict = Body(...)) -> dict:
     if not name:
         raise HTTPException(400, "name is required")
 
-    account_id = account_slug(name)
-    run_id = new_run_id(account_id)
-
-    jobs.start(run_id, name, lambda: run_account(
-        name=name,
+    options = dict(
         domain=payload.get("domain", ""),
         source_mode=payload.get("source_mode"),
         extract_mode=payload.get("extract_mode", "llm"),
         embed_backend=payload.get("embed_backend"),
         today=payload.get("today"),
-        run_id=run_id,
-    ))
+    )
+
+    if settings.demo_mode:
+        # Only the bundled synthetic companies, and only the deterministic path.
+        # Anything else would either find nothing (no live web) or, if it could,
+        # spend a key on behalf of an anonymous visitor.
+        if name.lower() not in {a.lower() for a in demo.allowed_accounts()}:
+            raise HTTPException(
+                400,
+                "The public demo only runs the bundled synthetic companies: "
+                + ", ".join(demo.allowed_accounts()) + ".",
+            )
+        options.update(demo.DEMO_RUN, domain="", today=None)
+        demo.prune_runs()
+
+    account_id = account_slug(name)
+    run_id = new_run_id(account_id)
+
+    jobs.start(run_id, name, lambda: run_account(name=name, run_id=run_id, **options))
 
     return {"run_id": run_id, "account": name, "account_id": account_id, "state": "running"}
 
@@ -202,7 +244,10 @@ def put_stage(account_id: str, payload: dict = Body(...)) -> dict:
 
 @app.put("/api/leads/{account_id}/owner", tags=["pipeline"])
 def put_owner(account_id: str, payload: dict = Body(...)) -> dict:
-    return leads.set_owner(account_id, payload.get("owner", ""), payload.get("account", ""))
+    owner = str(payload.get("owner", ""))
+    if settings.demo_mode:
+        owner = owner.strip()[: demo.MAX_OWNER_LENGTH]
+    return leads.set_owner(account_id, owner, payload.get("account", ""))
 
 
 # ---------------------------------------------------------------------------
@@ -234,7 +279,7 @@ def draft_email(run_id: str, payload: dict = Body(default={})) -> dict:
         brief=brief,
         intent_key=intent_key,
         sender=payload.get("sender") or {},
-        mode=payload.get("mode", "auto"),
+        mode="template" if settings.demo_mode else payload.get("mode", "auto"),
     )
     leads.record_email(brief, draft)
     return draft
@@ -262,7 +307,7 @@ def revise_email(payload: dict = Body(...)) -> dict:
         brief=brief,
         subject=payload.get("subject", ""),
         body=payload.get("body", ""),
-        mode=payload.get("mode", "auto"),
+        mode="template" if settings.demo_mode else payload.get("mode", "auto"),
     )
 
 
@@ -282,6 +327,7 @@ def get_rules_raw() -> str:
 @app.put("/api/rules/raw", tags=["rules"])
 def put_rules_raw(payload: dict = Body(...)) -> dict:
     """Edit the scoring rules from the UI. Validated before it is written."""
+    read_only()
     text = payload.get("yaml", "")
     try:
         parsed = yaml.safe_load(text)
@@ -312,6 +358,7 @@ def list_eval_runs() -> list[dict]:
 @app.post("/api/eval", tags=["eval"])
 def run_eval(payload: dict = Body(default={})) -> dict:
     """Run the eval harness and return its summary."""
+    read_only()
     args = [sys.executable, "-m", "eval.run_eval"]
     if payload.get("extract_mode"):
         args += ["--extract-mode", payload["extract_mode"]]

@@ -1,0 +1,27 @@
+# Render Blueprint: deploys OSINT Scout as a free, read-only public demo.
+#
+# In the Render dashboard: New > Blueprint > select this repository. Nothing else
+# to configure, and no secrets to enter.
+
+services:
+  - type: web
+    name: osint-scout
+    runtime: python
+    plan: free
+    region: singapore
+    branch: main
+    buildCommand: pip install --upgrade pip && pip install -r requirements-render.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DEMO_MODE
+        value: "true"
+      - key: SOURCE_MODE
+        value: fixture
+      - key: EMBED_BACKEND
+        value: lexical
+      - key: VECTOR_BACKEND
+        value: numpy

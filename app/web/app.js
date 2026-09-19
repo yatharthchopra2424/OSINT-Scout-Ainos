@@ -37,8 +37,47 @@ document.querySelectorAll('nav button').forEach((btn) => {
 });
 
 /* ─────────────────────────── header ─────────────────────────── */
+/* Public demo: say so, and lock what the server will refuse rather than let a
+   visitor click into a 403. The server enforces all of this independently. */
+function applyDemoMode(h) {
+  const banner = $('demoBanner');
+  banner.className = 'demo-banner';
+  banner.style.display = 'block';
+  banner.innerHTML = h.seeding
+    ? '<b>Public demo.</b> Loading the synthetic accounts, this takes a few seconds. Reload shortly.'
+    : '<b>Public read-only demo</b> running on synthetic companies. Model calls, live web, rule editing '
+      + 'and the eval launcher are switched off here. '
+      + '<a href="https://github.com/yatharthchopra2424/OSINT-Scout-Ainos" target="_blank" rel="noopener">'
+      + 'Clone the repository</a> to run it with your own accounts and keys.';
+
+  // Extractor / sources / embeddings: only the deterministic path exists here.
+  for (const [id, value] of [['runExtract', 'baseline'], ['runSource', 'fixture'], ['runEmbed', 'lexical'],
+                             ['evalExtract', 'baseline'], ['evalEmbed', 'lexical']]) {
+    const el = $(id);
+    if (!el) continue;
+    el.value = value;
+    el.disabled = true;
+    el.classList.add('locked');
+  }
+  for (const id of ['rulesSave', 'evalRun', 'wlAdd']) {
+    const el = $(id);
+    if (!el) continue;
+    el.disabled = true;
+    el.classList.add('locked');
+    el.title = 'Disabled on the public demo';
+  }
+  for (const id of ['rulesText', 'wlName', 'wlDomain', 'wlNotes', 'runDomain']) {
+    const el = $(id);
+    if (el) { el.readOnly = true; el.classList.add('locked'); }
+  }
+  const smoke = $('smokeBtn');
+  if (smoke) { smoke.disabled = true; smoke.classList.add('locked'); smoke.title = 'Model calls are off on the demo'; }
+}
+
 async function loadHealth() {
   const h = await api.get('/api/health');
+  state.demo = !!h.demo_mode;
+  if (state.demo) applyDemoMode(h);
   $('chips').innerHTML = [
     `<span class="chip ${h.nvidia_key_present ? 'on' : 'off'}">NVIDIA key <b>${h.nvidia_key_present ? 'present' : 'missing'}</b></span>`,
     `<span class="chip">sources <b>${esc(h.source_mode)}</b></span>`,
@@ -52,7 +91,7 @@ async function loadHealth() {
   if (!h.nvidia_key_present) { $('runExtract').value = 'baseline'; }
 }
 
-async function loadPipeline() {
+async function loadArchitecture() {
   const { nodes } = await api.get('/api/architecture');
   $('pipelineSteps').innerHTML = nodes.map((n, i) => `
     <div class="step ${n.model.startsWith('none') ? 'pure' : ''}">
@@ -82,7 +121,7 @@ async function loadWatchlist() {
       <td style="color:var(--muted)">${esc(a.notes || '')}</td>
       <td>
         <button class="ghost" data-run="${esc(a.name)}" data-domain="${esc(a.domain || '')}">Run</button>
-        <button class="ghost" data-del="${esc(a.name)}">Remove</button>
+        ${state.demo ? '' : `<button class="ghost" data-del="${esc(a.name)}">Remove</button>`}
       </td>
     </tr>`).join('') : '<tr><td colspan="4" class="empty">Nothing on the watchlist.</td></tr>';
 
@@ -786,7 +825,7 @@ document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && $('tour'
 /* ─────────────────────────── boot ─────────────────────────── */
 (async function boot() {
   await loadHealth();
-  await loadPipeline();
+  await loadArchitecture();
   await loadWatchlist();
   await loadRuns();
   await loadDigest();
