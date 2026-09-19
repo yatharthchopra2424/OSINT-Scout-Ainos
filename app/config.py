@@ -7,6 +7,7 @@ configured, this file is the complete answer.
 from pathlib import Path
 
 from dotenv import load_dotenv
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,7 +39,7 @@ class Settings(BaseSettings):
 
     # Public demo deployment: no model calls, no live web, nothing that spends
     # a key or mutates shared configuration. See app/demo.py.
-    demo_mode: bool = False
+    demo_mode: bool = Field(default=False, validation_alias=AliasChoices("demo_mode", "demo"))
 
     model_config = SettingsConfigDict(env_file=str(ROOT / ".env"), extra="ignore")
 
