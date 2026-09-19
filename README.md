@@ -20,7 +20,11 @@ database, with an eval harness that runs in CI and fails the build when quality 
 
 <!-- Paste the demo video link or embed below. -->
 
-> **Watch the walkthrough:** _(add your video link here)_
+> **Watch the walkthrough:** 
+
+https://github.com/user-attachments/assets/2165fe36-bd77-448c-be71-d61695280f57
+
+
 
 ---
 
