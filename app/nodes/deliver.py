@@ -6,6 +6,7 @@ this one prints it, and the eval harness scores whether it was right to stay qui
 
 from datetime import datetime, timezone
 
+from app.config import settings
 from app.llm import clients
 from app.ops import store as run_store
 from app.prompts import load as load_prompt
@@ -111,7 +112,11 @@ def deliver(state: RunState) -> dict:
     log.start("deliver")
 
     verified = state.get("verified", [])
-    use_llm = clients.available() and state.get("extract_mode") == "llm"
+    # The summary was a third model call for prose that the template already
+    # produces well and deterministically. Off by default: set SUMMARY_MODEL=llm
+    # if you want the model to write it.
+    use_llm = (settings.summary_model == "llm"
+               and clients.available() and state.get("extract_mode") == "llm")
 
     try:
         summary = _summary_llm(state, verified) if use_llm else _summary_template(state, verified)

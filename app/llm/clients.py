@@ -22,6 +22,11 @@ from app.config import settings
 # itself. The Nemotron 3 endpoints are not in that registry yet but answer fine —
 # verified against the live API — so the warning is noise on every single call.
 warnings.filterwarnings("ignore", message=r".*type is unknown and inference may fail.*")
+# The wrapper has no named argument for chat_template_kwargs, so it forwards it as
+# a model kwarg and warns. That is exactly what we want it to do — verified against
+# the live endpoint — so the warning is noise on every client construction.
+warnings.filterwarnings("ignore", message=r".*chat_template_kwargs is not default parameter.*")
+warnings.filterwarnings("ignore", message=r".*not known to support structured output.*")
 
 RETRY_ATTEMPTS = 4
 RETRY_BACKOFF = 2.5          # seconds, doubled each attempt
@@ -62,6 +67,22 @@ def call(runnable, payload, attempts: int = RETRY_ATTEMPTS):
     raise last                                              # type: ignore[misc]
 
 
+# Nemotron 3 models reason before answering. For open-ended questions that helps;
+# for "read these documents and return this JSON" it is pure cost — and the
+# thinking leaks into the answer, which is how an outreach draft once came back as
+# 1334 words of "Check for greeting: we didn't open with a greeting. Good."
+#
+# Measured against the live endpoint with one identical prompt:
+#     super      7.4s -> 1.0s     lightning     28.8s -> 5.8s
+# and Lightning's default reply began "Here's a thinking process:" while the
+# quiet one returned the JSON asked for.
+#
+# `max_thinking_tokens` is listed in the endpoint's error text but rejected as a
+# top-level parameter; this is the form that actually works.
+NO_THINKING = {"thinking": False}
+REQUEST_TIMEOUT = 180          # the default 60s was tripping on longer extractions
+
+
 @lru_cache(maxsize=None)
 def _chat(model: str, temperature: float, max_tokens: int):
     from langchain_nvidia_ai_endpoints import ChatNVIDIA
@@ -72,10 +93,12 @@ def _chat(model: str, temperature: float, max_tokens: int):
         base_url=settings.nvidia_base_url,
         temperature=temperature,
         max_tokens=max_tokens,
+        chat_template_kwargs=NO_THINKING,
+        timeout=REQUEST_TIMEOUT,
     )
 
 
-def reasoning(temperature: float = 0.1, max_tokens: int = 2048):
+def reasoning(temperature: float = 0.0, max_tokens: int = 2048):
     """The big model: extraction and summarising."""
     return _chat(settings.model_reasoning, temperature, max_tokens)
 

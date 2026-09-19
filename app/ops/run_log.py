@@ -6,6 +6,7 @@ replay exactly which node saw what, how long it took, and why a fact was dropped
 """
 
 import json
+import threading
 import time
 from datetime import datetime, timezone
 from pathlib import Path
@@ -34,12 +35,17 @@ class RunLog:
         self.run_id = run_id
         self.path = run_dir(run_id) / "run.jsonl"
         self._started: dict[str, float] = {}
+        # The verify node judges facts on a thread pool, so several threads can
+        # log at once. Without this, two appends can interleave and produce a
+        # half-written line that breaks every reader of the file.
+        self._lock = threading.Lock()
 
     def _write(self, record: dict) -> None:
         record["ts"] = datetime.now(timezone.utc).isoformat()
         record["run_id"] = self.run_id
-        with open(self.path, "a", encoding="utf-8") as fh:
-            fh.write(json.dumps(record, default=str) + "\n")
+        line = json.dumps(record, default=str) + "\n"
+        with self._lock, open(self.path, "a", encoding="utf-8") as fh:
+            fh.write(line)
 
     def event(self, level: str, node: str, message: str, **fields) -> None:
         self._write({"level": level, "node": node, "message": message, **fields})

@@ -2,22 +2,25 @@
 
 **An agentic account-monitoring tool for Sales & Alliances.**
 
-Give it a list of companies. It gathers public information, extracts facts that each
-cite the page they came from, throws away anything the sources do not support, scores
-the account with rules rather than a model's opinion, drafts the outreach email, and
-tells you **what changed since the last run**.
+Give it a list of companies. For each one it:
 
-Built on open **NVIDIA Nemotron** models, **LangGraph**, and a RAG pipeline over a
-vector database — with an eval harness that runs in CI and fails the build when
-quality drops.
+- Gathers public information and indexes it in a vector database
+- Extracts facts, each citing the page it came from
+- Discards anything the sources do not support, and shows you what it discarded
+- Scores the account with tunable rules rather than a model's opinion
+- Drafts the outreach email, grounded only in verified facts
+- Reports **what changed since the last run**
+
+Built on open **NVIDIA Nemotron** models, **LangGraph**, and RAG over a vector
+database, with an eval harness that runs in CI and fails the build when quality drops.
 
 ---
 
-## 📹 Demo video
+## Demo video
 
 <!-- Paste the demo video link or embed below. -->
 
-> **▶ Watch the walkthrough: _(add your video link here)_**
+> **Watch the walkthrough:** _(add your video link here)_
 
 ---
 
@@ -42,27 +45,32 @@ quality drops.
 - [Scope guardrail](#scope-guardrail)
 - [Honest limits](#honest-limits)
 - [Repo map](#repo-map)
-- [Environment file](#-environment-file)
+- [Environment file](#environment-file)
 
 ---
 
 ## What problem it solves
 
-Before a call, a renewal, or a partner conversation, someone spends two to four hours
-googling an account: recent news, funding, leadership changes, hiring signals, tech
-stack. It is repetitive, inconsistent between reps, stale within a month, and nobody
-can tell you where a claim came from.
+**The task.** Before a call, a renewal, or a partner conversation, someone spends two
+to four hours researching an account:
 
-Reps spend only **30–40% of their time selling**. Roughly **11%** goes to CRM data
-entry and **9–11%** to prospecting research — and data entry is consistently named the
-one part of the job that is *fully* automatable.
+- Recent news, funding, leadership changes, hiring signals, tech stack
+- Repetitive, and inconsistent between reps
+- Stale within a month
+- No record of where any claim came from
 
-Account research automation is also the most commercially validated GenAI use case in
-go-to-market — Clay, Clearbit, ZoomInfo Copilot, Common Room and 6sense all sell a
-version of it. **Which means the generic version is a commodity.** Anyone can get a
+**The cost.**
+
+- Reps spend only **30–40% of their time selling**
+- Roughly **11%** goes to CRM data entry, **9–11%** to prospecting research
+- Data entry is consistently named the one part of the job that is *fully* automatable
+
+**The catch.** Account research automation is the most commercially validated GenAI
+use case in go-to-market — Clay, Clearbit, ZoomInfo Copilot, Common Room and 6sense all
+sell a version of it. **So the generic version is a commodity.** Anyone can get a
 company summary out of a chatbot with browsing.
 
-Five things make this one different, and they are the only five worth talking about:
+Five things make this one different:
 
 | | |
 |---|---|
@@ -147,9 +155,14 @@ EMBED_BACKEND=nemotron
 For live web sources instead of the bundled fixtures, add a free
 [Tavily](https://tavily.com) key and set `SOURCE_MODE=web`.
 
-> ⚠️ **A run with the `llm` extractor takes about seven minutes.** The reasoning model
-> is slow. Runs happen in the background, so you can leave the tab or reload the page —
-> progress is shown node by node and the run reattaches automatically.
+**A run is two model calls, whichever extractor you choose:**
+
+- One call to extract facts from the retrieved text
+- One call to judge every extracted fact against its sources, batched together
+- Scoring, change detection and the summary are plain Python and cost nothing
+
+Runs execute in the background, so you can leave the tab or reload the page.
+Progress is reported node by node and the run reattaches automatically.
 
 ---
 
@@ -166,9 +179,11 @@ For live web sources instead of the bundled fixtures, add a free
 
 ![Agent tab showing the eight pipeline nodes](docs/screenshots/01-agent.png)
 
-**What you are looking at.** The eight steps a run walks through, in order. The blue
-boxes use a language model; **the green ones are plain Python**. That split is the
-whole design: the model reads and extracts, the code decides and reports.
+**What you are looking at.**
+
+- The eight steps a run walks through, in order
+- Blue boxes use a language model; **green boxes are plain Python**
+- That split is the whole design: the model reads and extracts, the code decides and reports
 
 **Use it to:**
 
@@ -198,7 +213,7 @@ press **Run**:
 | Control | What it changes |
 |---|---|
 | **Sources** | `fixture` reads the bundled frozen documents (instant, offline). `web` does live Tavily search + page fetch. |
-| **Extractor** | `baseline` is keyword matching — deterministic, no API key, under a second. `llm` is Nemotron — better, and about seven minutes. |
+| **Extractor** | `baseline` is keyword matching — deterministic, no API key, instant. `llm` is Nemotron — better banding, two model calls. |
 | **Embeddings** | `lexical` is an offline hashing embedder. `nemotron` is the real retrieval model. |
 
 Progress appears below the form as each of the eight nodes completes, with per-node
@@ -219,14 +234,17 @@ appeared. This is the thirty-second version of "what happened to my accounts."
 
 ![Pipeline tab with stage board, stale deals and conversion funnel](docs/screenshots/03-pipeline.png)
 
-**What you are looking at.** A brief tells you what is true about a company. A **lead**
-tells you what you did next. Without stage and last-touch there is no pipeline, no
-stale-deal list and no conversion rate — which is most of what a salesperson actually
-looks at.
+**What you are looking at.**
 
-**Everything on an account's timeline is written automatically.** Researching an
-account moves it to *Researched* on its own; drafting an email logs itself with the
-intent and the style score. Nobody types what the system already knows.
+- A brief tells you what is true about a company; a **lead** tells you what you did next
+- Without stage and last-touch there is no pipeline, no stale-deal list, no conversion rate
+- That is most of what a salesperson actually looks at
+
+**Everything on an account's timeline is written automatically.**
+
+- Researching an account moves it to *Researched* on its own
+- Drafting an email logs itself, with the intent and the style score
+- Nobody types what the system already knows
 
 **Use case A — the stage board.** Counts across New → Researched → Contacted → Replied
 → Qualified → Won/Lost, plus totals and band distribution at a glance.
@@ -255,9 +273,11 @@ open any account's **Timeline** to read every run, draft and stage change in ord
 
 ![Briefs tab with a full account brief open](docs/screenshots/04-brief.png)
 
-**What you are looking at.** Every run ever produced, collapsed to the latest per
-account (tick the box to see full history, or filter by company). Click any row to read
-its brief.
+**What you are looking at.**
+
+- Every run ever produced, collapsed to the latest per account
+- Tick the box for full history, or filter by company
+- Click any row to read its brief
 
 **Use case A — verify a claim in one click.** Every fact links to the page it was read
 from, with its date and support score. You never have to take the tool's word for
@@ -285,9 +305,11 @@ rest believable.
 
 ![Outreach panel with a drafted email and its style score](docs/screenshots/05-outreach.png)
 
-**What you are looking at.** The drafter sits at the bottom of every brief. It is
-useful **before anyone has vetted the lead**, because the draft names exactly which
-facts it used and refuses to write at all when there is nothing verified to open on.
+**What you are looking at.**
+
+- The drafter sits at the bottom of every brief
+- Useful **before anyone has vetted the lead**: the draft names exactly which facts it used
+- It refuses to write at all when there is nothing verified to open on
 
 **Use case A — pick why you are writing.** Intent is the input that matters most, and
 the thing a generic "write me an email" prompt always gets wrong:
@@ -454,10 +476,14 @@ on the signals that actually move a score is what matters, not elegance.
 
 ### Graceful degradation is not a stub
 
-With no API key the app runs end to end on a keyword control extractor, lexical hashing
-embeddings and a lexical verifier. That control path is not a placeholder — **it is the
-baseline the eval harness measures the model against**. If Nemotron cannot beat keyword
-matching, it is not earning its latency.
+With no API key the app still runs end to end:
+
+- A keyword control extractor in place of the model
+- Lexical hashing embeddings in place of `nemotron-3-embed-1b`
+- A quote-and-overlap verifier in place of the model judge
+
+That control path is not a placeholder — **it is the baseline the eval harness measures
+the model against**. If Nemotron cannot beat keyword matching, it is not earning its cost.
 
 ---
 
@@ -474,43 +500,49 @@ than the system.
 
 ### Does the model earn its cost?
 
-Both extractors, same gold set, same pinned date:
+Three runs per account, same gold set, same pinned date:
 
 | metric | control (keywords) | Nemotron | gate |
 |---|---|---|---|
-| fact_precision | 0.94 | **1.00** | 0.85 |
-| fact_recall | 0.83 | **0.92** | 0.70 |
-| correct_abstention | 0.97 | **1.00** | 0.90 |
-| band_accuracy | 0.83 | **1.00** | 0.80 |
+| schema_validity | 1.00 | 1.00 | 1.00 |
+| fact_precision | **0.94** | 0.80 | 0.85 |
+| fact_recall | 0.83 | **0.96** | 0.70 |
 | citation_groundedness | 1.00 | 1.00 | 0.90 |
 | retrieval_hit_rate | 1.00 | 1.00 | 0.80 |
+| correct_abstention | 0.97 | **1.00** | 0.90 |
+| band_accuracy | 0.83 | **1.00** | 0.80 |
+| score_stability | 1.00 | 1.00 | 1.00 |
+| delta_noise | **0** | 2 | 0 |
 
-**The control extractor falls for the attribution trap and lands Solent Maritime in the
-wrong band. Nemotron does not.** That single row is why the model is worth its latency.
+**What the model buys you.** The control extractor falls for the attribution trap and
+lands Solent Maritime in the wrong band. Nemotron does not, and gets every band right.
+
+**What it costs you, measured rather than hidden:**
+
+- **Lower precision, 0.80 against 0.94.** This is not hallucination: groundedness is
+  1.00 and every extra fact is verbatim in the sources. The model finds more true facts
+  than the closed gold set anticipated, and a closed-set metric scores that as a miss.
+- **`delta_noise` still fails on the model path.** Two accounts report a change on an
+  identical re-run, because extraction is non-deterministic at the margins. Matching
+  reworded facts by content rather than by wording removed most of it; some remains.
+- **Only the control path gates CI**, and it passes all nine. The model path is run
+  manually and reported here exactly as it comes out.
 
 ### What the harness caught
 
-The first model run **failed** two gates — 0.74 precision, 0.81 abstention — because it
-turned a copyright line into "Atlas Freight Systems holds a copyright from 2026", and
-because it fell for the Solent trap on that sample after avoiding it on an earlier one.
-Fixing it took a boilerplate filter on ingestion, an explicit attribution rule in the
-extract prompt, and completing a gold set that had been quietly penalising the model for
-finding true facts the fixtures did not list. **None of that would have been visible
-without the eval.**
+Four real defects, none of which would have been visible without it:
 
-### The metrics
+- **A copyright line extracted as a fact** — "Atlas Freight Systems holds a copyright
+  from 2026". Fixed with a boilerplate filter on ingestion.
+- **A competitor's funding round attributed to the target company**, which flipped an
+  account into the wrong band. Fixed with an explicit attribution rule in the prompt.
+- **A missing `event_date`**, which silently turned an account with five correct facts
+  from High (75) into Low (0). Fixed by back-filling the date deterministically.
+- **Phantom change between identical runs**, because the diff matched facts on their
+  exact wording. Fixed by matching on content, with figures decisive.
 
-| Metric | What it measures |
-|---|---|
-| `schema_validity` | Output matches `account_brief.v1` |
-| `fact_precision` | Extracted facts that are actually correct |
-| `fact_recall` | Gold facts that were found |
-| `citation_groundedness` | Facts whose cited source really supports them — **re-checked independently, not trusting the verify node** |
-| `retrieval_hit_rate` | Did the right document make the top-k |
-| `correct_abstention` | Does it admit what it could not find |
-| `band_accuracy` | Did the account land in the right commercial band |
-| `score_stability` | Same input, same score, three runs |
-| `delta_noise` | An identical re-run must report zero changes |
+A gold set that quietly penalised the model for finding true facts the fixtures did not
+list was also corrected.
 
 ### Unit tests
 
@@ -530,18 +562,31 @@ python -m pytest tests -q
 
 ### Two things the endpoint does that the code has to survive
 
-**`guided_json` is not always accepted.** The NIM endpoint rejects it with a 400 on some
-backend instances and accepts it on others — same model, same key, minutes apart. So
-`clients.structured()` tries the strict path and falls back to asking for the same shape
-in the prompt, parsing the reply with a balanced-brace reader that copes with code
-fences, prose around the JSON, and replies cut off mid-object. Both paths validate
-against the schema.
+**`guided_json` is not always accepted.**
 
-**The model leaves out dates.** Asked for `event_date` it frequently returns null, and a
-fact with no date cannot fire a time-windowed rule — which silently turned one account
-from **High (75) into Low (0)** on a run where every fact was correct. The date is not a
-judgement call: it is either written in the sentence or it is the publication date of
-the cited page. So `extract` back-fills it deterministically rather than asking again.
+- The NIM endpoint rejects it with a 400 on some backend instances and accepts it on
+  others — same model, same key, minutes apart
+- `clients.structured()` tries the strict path, then falls back to asking for the same
+  shape in the prompt
+- The reply is read with a balanced-brace parser that copes with code fences, prose
+  around the JSON, and replies cut off mid-object
+- Both paths validate against the schema, so nothing unshaped gets through
+
+**The model leaves out dates.**
+
+- Asked for `event_date` it frequently returns null
+- A fact with no date cannot fire a time-windowed rule, which silently turned one
+  account from **High (75) into Low (0)** on a run where every fact was correct
+- The date is not a judgement call: it is written in the sentence, or it is the
+  publication date of the cited page
+- So `extract` back-fills it deterministically rather than asking the model again
+
+**The models think before answering, and that is switched off.** Nemotron 3 reasons by
+default. For "read these documents and return this JSON" that is pure cost, and the
+reasoning leaks into the answer. Sending `chat_template_kwargs={"thinking": false}`
+took one identical prompt from **7.4s to 1.0s** on Super and **28.8s to 5.8s** on
+Lightning, and stopped Lightning replying with "Here's a thinking process:" instead of
+the JSON. End to end this took a full account run from **446 seconds to 36**.
 
 ---
 
@@ -580,16 +625,18 @@ retrieval accuracy, so the wrapper handles it rather than us.
 
 ## Scope guardrail
 
-**Company-level public information only.** No people dossiers, no scraping personal
-profiles, no compiling information about individuals across sources. Named executives
-appear only as a role and an appointment, from a public announcement. `robots.txt` is
-respected and every fetch is cached.
+**Company-level public information only.**
 
-The gold-set companies are **synthetic**. Nothing in `eval/fixtures/` describes a real
+- No people dossiers, no scraping personal profiles
+- No compiling information about individuals across sources
+- Named executives appear only as a role and an appointment, from a public announcement
+- `robots.txt` is respected and every fetch is cached
+
+**The gold-set companies are synthetic.** Nothing in `eval/fixtures/` describes a real
 business, which is what makes it safe to commit.
 
-NVIDIA's free tier logs inputs and outputs under its trial terms — use public or
-synthetic data only. Real customer data needs a self-hosted NIM or a paid endpoint.
+**Use public or synthetic data only.** NVIDIA's free tier logs inputs and outputs under
+its trial terms. Real customer data needs a self-hosted NIM or a paid endpoint.
 
 ---
 
@@ -603,8 +650,9 @@ output before it reaches a customer. It is **not** a product.
   billions because they own licensed data, not because of clever prompts.
 - **Coverage fails on SMBs and stealth companies** — not enough public surface.
   `atlas-freight-systems` is that case, measured rather than hidden.
-- **`score_stability` is unmeasured on the model path.** It runs at `--runs 1` because a
-  model run is ~100× slower. Treat it as unproven until you run `--runs 3`.
+- **Throughput is bounded by the free tier**, which allows roughly 40 requests a
+  minute and returns a 503 when the shared endpoint is busy. Calls retry with
+  backoff; a self-hosted NIM removes the ceiling.
 - **Jobs live in the server process**, so restarting it kills an in-flight run. The UI
   reports it rather than hanging, but the work is lost. Production needs a job queue.
 - **Not built:** auth, multi-tenancy, per-tenant rate limits, secret rotation, audit
@@ -653,11 +701,11 @@ Actions free.
 
 <br>
 
-# 🔐 ENVIRONMENT FILE
+# ENVIRONMENT FILE
 
 # The `.env` file is not in this repository — API keys must never be committed.
 
-## 👉 **Download the `.env` file here:** _(add your link here)_
+## **Download the `.env` file:** [**drive.google.com**](https://drive.google.com/file/d/1xUXrKkoruOH-YZQUR_3E24T3lyKHTaPY/view?usp=sharing)
 
 <br>
 

@@ -34,6 +34,7 @@ class Settings(BaseSettings):
 
     # --- verification -------------------------------------------------------
     support_threshold: float = 0.5
+    summary_model: str = "template"      # template | llm
 
     model_config = SettingsConfigDict(env_file=str(ROOT / ".env"), extra="ignore")
 
