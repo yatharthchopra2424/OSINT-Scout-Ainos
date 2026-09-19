@@ -1,10 +1,8 @@
-# Dependencies for the public demo on Render.
+# Dependencies for deployment on Render.
 #
-# Smaller than requirements.txt on purpose. The demo runs the deterministic control
-# path only, so it never imports chromadb (the vector store falls back to the
-# built-in NumPy one) or langchain-nvidia-ai-endpoints (no model calls). Leaving
-# them out keeps the build fast and the memory footprint inside the free tier's
-# 512 MB.
+# Keeps memory footprint inside Render's 512 MB free tier by using the built-in
+# NumPy vector store rather than ChromaDB, while providing full support for
+# NVIDIA Nemotron models (extraction, verification, embeddings) and LangGraph.
 
 fastapi>=0.115
 uvicorn[standard]>=0.34
@@ -18,3 +16,4 @@ numpy>=1.26
 
 langgraph>=0.2.50
 langchain-core>=0.3.20
+langchain-nvidia-ai-endpoints>=0.3.5

@@ -1,7 +1,6 @@
-# Render Blueprint: deploys OSINT Scout as a free, read-only public demo.
+# Render Blueprint: deploys OSINT Scout.
 #
-# In the Render dashboard: New > Blueprint > select this repository. Nothing else
-# to configure, and no secrets to enter.
+# In the Render dashboard: New > Blueprint > select this repository.
 
 services:
   - type: web
@@ -18,10 +17,14 @@ services:
       - key: PYTHON_VERSION
         value: 3.12.8
       - key: DEMO_MODE
-        value: "true"
+        value: "false"
       - key: SOURCE_MODE
         value: fixture
       - key: EMBED_BACKEND
         value: lexical
       - key: VECTOR_BACKEND
         value: numpy
+      - key: NVIDIA_API_KEY
+        sync: false
+      - key: TAVILY_API_KEY
+        sync: false
