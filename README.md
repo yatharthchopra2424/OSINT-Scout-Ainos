@@ -793,9 +793,3 @@ copy .env.example .env
 > path. Keys only switch on the Nemotron models and live web sources.
 
 <br>
-
----
-
-## License
-
-[MIT](LICENSE) © 2026 Yatharth Chopra
