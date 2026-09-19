@@ -115,6 +115,16 @@ This runs the whole agent against six frozen gold accounts, three times each, an
 scores nine metrics. **It needs no API key and touches no network.** If this passes,
 the system is working.
 
+### Step 1b — run the unit tests
+
+```bash
+python -m pytest tests -q
+```
+
+46 tests covering the parts where a silent mistake changes a commercial answer:
+the scoring rules, the style and claim checks, the date back-fill, the model-reply
+parser and the boilerplate filter. No network, no key, under a second.
+
 ### Step 2 — start the console
 
 ```bash
@@ -502,6 +512,22 @@ without the eval.**
 | `score_stability` | Same input, same score, three runs |
 | `delta_noise` | An identical re-run must report zero changes |
 
+### Unit tests
+
+The eval harness tests the system end to end. These test the pieces where a quiet
+mistake would not show up as an obvious failure:
+
+| File | Covers |
+|---|---|
+| `tests/test_rules_engine.py` | Rules fire inside their window and not outside; undated facts cannot fire a time-windowed rule; layoffs cancel a hiring signal; the score floors at zero; a rule fires at most once; band boundaries; determinism |
+| `tests/test_style.py` | Grounded email scores well; stock phrasing is punished; a grammatical but generic email still fails; a number with no supporting fact is flagged; meeting times are not mistaken for claims |
+| `tests/test_extract_dates.py` | Dates read from the sentence, the quote, then the cited page's publication date; an existing date is never overwritten; genuinely undated facts are left alone |
+| `tests/test_model_output.py` | JSON recovered from fences, prose, thinking tags, braces inside strings and replies cut off mid-object; a 401 is not mistaken for an unsupported-feature 400; boilerplate filtering |
+
+```bash
+python -m pytest tests -q
+```
+
 ### Two things the endpoint does that the code has to survive
 
 **`guided_json` is not always accepted.** The NIM endpoint rejects it with a 400 on some
@@ -521,8 +547,8 @@ the cited page. So `extract` back-fills it deterministically rather than asking 
 
 ## Automation with GitHub Actions
 
-**`.github/workflows/eval.yml`** — runs the gold set on every push and pull request and
-**fails the build if a gate drops**. No secrets required; the control extractor and
+**`.github/workflows/eval.yml`** — runs the unit tests and then the gold set on every
+push and pull request, and **fails the build if a gate drops**. No secrets required; the control extractor and
 lexical embeddings run offline.
 
 **`.github/workflows/watchlist.yml`** — nightly cron over `data/watchlist.yml`: refresh
@@ -612,6 +638,7 @@ eval/
   fixtures/            6 synthetic accounts, frozen documents, gold facts
   metrics.py           scoring, re-checked independently of the pipeline
   run_eval.py          the harness
+tests/                 46 unit tests — rules, style, dates, model-reply parsing
 scripts/
   refresh_watchlist.py what the nightly Action runs
   capture_screens.py   regenerates the screenshots in this README

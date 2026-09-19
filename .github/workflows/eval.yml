@@ -36,7 +36,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install fastapi "uvicorn[standard]" pydantic pydantic-settings \
                       python-dotenv PyYAML httpx numpy \
-                      langgraph langchain-core langchain-nvidia-ai-endpoints
+                      langgraph langchain-core langchain-nvidia-ai-endpoints \
+                      pytest
+
+      - name: Unit tests
+        run: python -m pytest tests -q
 
       - name: Run the gold set
         run: python -m eval.run_eval --extract-mode baseline --embed-backend lexical

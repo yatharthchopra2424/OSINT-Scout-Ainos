@@ -25,3 +25,7 @@ langchain-nvidia-ai-endpoints>=0.3.5
 # Optional. The app falls back to its built-in numpy vector store if this is
 # missing, so a failed chromadb build does not stop you working.
 chromadb>=0.5.20
+
+# --- tests -------------------------------------------------------------------
+#   python -m pytest tests -q
+pytest>=8.0
