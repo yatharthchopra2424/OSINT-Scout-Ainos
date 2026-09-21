@@ -1,6 +1,6 @@
 # Castor Telecom
 
-*Run `castor-telecom_20260918-131403-943` · 2026-09-18T13:14:04.063083+00:00 · source: fixture*
+*Run `castor-telecom_20260921-075213-634` · 2026-09-21T07:52:13.640918+00:00 · source: fixture*
 
 **Signal score 0 (Low)**
 
@@ -19,7 +19,7 @@ Castor Telecom: 3 verified fact(s) across company profile, hiring, layoffs. Sign
 - `layoffs` -20 — Cost-cutting usually freezes new vendor spend. (Castor Telecom confirmed layoffs of 900 roles on 2026-08-05 as part of a restructuring of its network division.)
 
 ## What changed
-- band Low -> Low (flat)
+- first run for this account, nothing to compare against
 
 ## Gaps
 - No public evidence found for: funding

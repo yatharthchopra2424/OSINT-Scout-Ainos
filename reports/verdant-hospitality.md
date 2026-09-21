@@ -1,6 +1,6 @@
 # Verdant Hospitality
 
-*Run `verdant-hospitality_20260918-131403-822` · 2026-09-18T13:14:03.940097+00:00 · source: fixture*
+*Run `verdant-hospitality_20260921-075213-302` · 2026-09-21T07:52:13.309663+00:00 · source: fixture*
 
 **Signal score 20 (Low)**
 
@@ -19,7 +19,7 @@ Verdant Hospitality: 3 verified fact(s) across company profile, partnership, tec
 - `tech_overlap` +10 — A known stack means a shorter integration conversation. (Verdant Hospitality uses a legacy property management system that the group has said it intends to replace within two years.)
 
 ## What changed
-- band Low -> Low (flat)
+- first run for this account, nothing to compare against
 
 ## Gaps
 - No public evidence found for: funding

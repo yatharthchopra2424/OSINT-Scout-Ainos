@@ -1,6 +1,6 @@
 # Northwind Logistics
 
-*Run `northwind-logistics_20260918-131402-654` · 2026-09-18T13:14:03.695537+00:00 · source: fixture*
+*Run `northwind-logistics_20260921-075212-844` · 2026-09-21T07:52:12.867563+00:00 · source: fixture*
 
 **Signal score 75 (High)**
 
@@ -25,7 +25,7 @@ Northwind Logistics: 5 verified fact(s) across company profile, funding, hiring,
 - `partnership` +10 — An alliance footprint shows appetite to work with outside vendors. (Northwind Logistics partners with PortLink to integrate real-time container tracking, announced 2026-05-20.)
 
 ## What changed
-- band High -> High (flat)
+- first run for this account, nothing to compare against
 
 ## Gaps
 - No public evidence found for: leadership change

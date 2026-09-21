@@ -1,6 +1,6 @@
 # Helio Airways
 
-*Run `helio-airways_20260918-131403-698` · 2026-09-18T13:14:03.819442+00:00 · source: fixture*
+*Run `helio-airways_20260921-075212-977` · 2026-09-21T07:52:12.984604+00:00 · source: fixture*
 
 **Signal score 50 (Medium)**
 
@@ -22,7 +22,7 @@ Helio Airways: 4 verified fact(s) across company profile, leadership change, pro
 - `tech_overlap` +10 — A known stack means a shorter integration conversation. (Helio Airways runs on an Amadeus passenger service system, with a cloud data warehouse for operations reporting.)
 
 ## What changed
-- band Medium -> Medium (flat)
+- first run for this account, nothing to compare against
 
 ## Gaps
 - No public evidence found for: funding

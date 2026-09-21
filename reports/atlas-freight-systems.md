@@ -1,6 +1,6 @@
 # Atlas Freight Systems
 
-*Run `atlas-freight-systems_20260918-131404-065` · 2026-09-18T13:14:04.193294+00:00 · source: fixture*
+*Run `atlas-freight-systems_20260921-075213-812` · 2026-09-21T07:52:13.817752+00:00 · source: fixture*
 
 **Signal score 0 (Low)**
 
@@ -13,7 +13,7 @@ No verified public information was found for Atlas Freight Systems. Either the c
 - no rules fired
 
 ## What changed
-- band Low -> Low (flat)
+- first run for this account, nothing to compare against
 
 ## Gaps
 - No public evidence found for: funding

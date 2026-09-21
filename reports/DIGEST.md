@@ -1,23 +1,18 @@
 # Watchlist digest
 
-Generated 2026-09-18T13:14:02+00:00 · sources: fixture · extractor: baseline
+Generated 2026-09-21T07:52:12+00:00 · sources: fixture · extractor: baseline
 
-## Northwind Logistics — 75 (High) · High -> High
+## Northwind Logistics — 75 (High) · first run
 
-No change since the last run.
 
-## Helio Airways — 50 (Medium) · Medium -> Medium
+## Helio Airways — 50 (Medium) · first run
 
-No change since the last run.
 
-## Verdant Hospitality — 20 (Low) · Low -> Low
+## Verdant Hospitality — 20 (Low) · first run
 
-No change since the last run.
 
-## Castor Telecom — 0 (Low) · Low -> Low
+## Castor Telecom — 0 (Low) · first run
 
-No change since the last run.
 
-## Atlas Freight Systems — 0 (Low) · Low -> Low
+## Atlas Freight Systems — 0 (Low) · first run
 
-No change since the last run.
