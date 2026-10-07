@@ -1,6 +1,6 @@
 # Northwind Logistics
 
-*Run `northwind-logistics_20261006-085010-393` · 2026-10-06T08:50:10.411941+00:00 · source: fixture*
+*Run `northwind-logistics_20261007-082846-559` · 2026-10-07T08:28:46.588743+00:00 · source: fixture*
 
 **Signal score 75 (High)**
 
