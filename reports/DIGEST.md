@@ -1,6 +1,6 @@
 # Watchlist digest
 
-Generated 2026-10-07T08:28:46+00:00 · sources: fixture · extractor: baseline
+Generated 2026-10-08T08:44:39+00:00 · sources: fixture · extractor: baseline
 
 ## Northwind Logistics — 75 (High) · first run
 
@@ -8,7 +8,7 @@ Generated 2026-10-07T08:28:46+00:00 · sources: fixture · extractor: baseline
 ## Helio Airways — 50 (Medium) · first run
 
 
-## Verdant Hospitality — 20 (Low) · first run
+## Verdant Hospitality — 10 (Low) · first run
 
 
 ## Castor Telecom — 0 (Low) · first run

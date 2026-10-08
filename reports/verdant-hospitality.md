@@ -1,10 +1,10 @@
 # Verdant Hospitality
 
-*Run `verdant-hospitality_20261007-082846-606` · 2026-10-07T08:28:46.616294+00:00 · source: fixture*
+*Run `verdant-hospitality_20261008-084439-430` · 2026-10-08T08:44:39.441566+00:00 · source: fixture*
 
-**Signal score 20 (Low)**
+**Signal score 10 (Low)**
 
-Verdant Hospitality: 3 verified fact(s) across company profile, partnership, tech stack. Signal score 20 (Low). Every statement below links to the source it was read from.
+Verdant Hospitality: 3 verified fact(s) across company profile, partnership, tech stack. Signal score 10 (Low). Every statement below links to the source it was read from.
 
 ## Verified facts
 - **company profile** (2026-03-05) — Verdant Hospitality is a hotel group running 61 mid-market properties across Spain and Portugal.  
@@ -15,7 +15,6 @@ Verdant Hospitality: 3 verified fact(s) across company profile, partnership, tec
   <https://verdanthospitality.example/technology> · support 1.0
 
 ## Why this score
-- `partnership` +10 — An alliance footprint shows appetite to work with outside vendors. (Verdant Hospitality partners with a regional booking platform to distribute rooms, announced 2026-04-10.)
 - `tech_overlap` +10 — A known stack means a shorter integration conversation. (Verdant Hospitality uses a legacy property management system that the group has said it intends to replace within two years.)
 
 ## What changed
