@@ -1,6 +1,6 @@
 # Helio Airways
 
-*Run `helio-airways_20261019-073556-658` · 2026-10-19T07:35:56.669261+00:00 · source: fixture*
+*Run `helio-airways_20261020-072305-724` · 2026-10-20T07:23:05.735767+00:00 · source: fixture*
 
 **Signal score 50 (Medium)**
 
