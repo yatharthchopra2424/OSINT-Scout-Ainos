@@ -1,6 +1,6 @@
 # Watchlist digest
 
-Generated 2026-10-28T08:11:45+00:00 · sources: fixture · extractor: baseline
+Generated 2026-10-29T08:18:30+00:00 · sources: fixture · extractor: baseline
 
 ## Northwind Logistics — 75 (High) · first run
 
