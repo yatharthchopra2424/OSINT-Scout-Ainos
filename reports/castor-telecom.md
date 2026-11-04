@@ -1,10 +1,10 @@
 # Castor Telecom
 
-*Run `castor-telecom_20261103-092009-590` · 2026-11-03T09:20:09.601669+00:00 · source: fixture*
+*Run `castor-telecom_20261104-085400-463` · 2026-11-04T08:54:00.474139+00:00 · source: fixture*
 
-**Signal score 0 (Low)**
+**Signal score 20 (Low)**
 
-Castor Telecom: 3 verified fact(s) across company profile, hiring, layoffs. Signal score 0 (Low). Every statement below links to the source it was read from.
+Castor Telecom: 3 verified fact(s) across company profile, hiring, layoffs. Signal score 20 (Low). Every statement below links to the source it was read from.
 
 ## Verified facts
 - **company profile** (2026-01-30) — Castor Telecom is a telecommunications operator selling mobile and fixed broadband to 11 million subscribers.  
@@ -16,7 +16,6 @@ Castor Telecom: 3 verified fact(s) across company profile, hiring, layoffs. Sign
 
 ## Why this score
 - `hiring_surge` +20 — Open roles signal an expanding function with new problems to solve. (Castor Telecom is hiring for 12 open roles in its data and analytics team, listed on 2026-07-01.)
-- `layoffs` -20 — Cost-cutting usually freezes new vendor spend. (Castor Telecom confirmed layoffs of 900 roles on 2026-08-05 as part of a restructuring of its network division.)
 
 ## What changed
 - first run for this account, nothing to compare against

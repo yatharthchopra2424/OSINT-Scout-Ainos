@@ -1,6 +1,6 @@
 # Watchlist digest
 
-Generated 2026-11-03T09:20:09+00:00 · sources: fixture · extractor: baseline
+Generated 2026-11-04T08:54:00+00:00 · sources: fixture · extractor: baseline
 
 ## Northwind Logistics — 75 (High) · first run
 
@@ -11,7 +11,7 @@ Generated 2026-11-03T09:20:09+00:00 · sources: fixture · extractor: baseline
 ## Verdant Hospitality — 10 (Low) · first run
 
 
-## Castor Telecom — 0 (Low) · first run
+## Castor Telecom — 20 (Low) · first run
 
 
 ## Atlas Freight Systems — 0 (Low) · first run
