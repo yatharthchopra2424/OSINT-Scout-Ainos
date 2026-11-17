@@ -1,10 +1,10 @@
 # Northwind Logistics
 
-*Run `northwind-logistics_20261116-092148-612` · 2026-11-16T09:21:48.637883+00:00 · source: fixture*
+*Run `northwind-logistics_20261117-102840-853` · 2026-11-17T10:28:40.877185+00:00 · source: fixture*
 
-**Signal score 75 (High)**
+**Signal score 65 (High)**
 
-Northwind Logistics: 5 verified fact(s) across company profile, funding, hiring, market expansion, partnership. Signal score 75 (High). Every statement below links to the source it was read from.
+Northwind Logistics: 5 verified fact(s) across company profile, funding, hiring, market expansion, partnership. Signal score 65 (High). Every statement below links to the source it was read from.
 
 ## Verified facts
 - **company profile** (2026-01-12) — Northwind Logistics is a freight forwarder headquartered in Rotterdam, operating ocean and road freight across 14 countries.  
@@ -22,7 +22,6 @@ Northwind Logistics: 5 verified fact(s) across company profile, funding, hiring,
 - `recent_funding` +30 — Fresh capital means budget to spend. (Northwind Logistics raised 42 million euro in a Series B round on 2026-06-10.)
 - `hiring_surge` +20 — Open roles signal an expanding function with new problems to solve. (Northwind Logistics is hiring across technology and operations, with 38 open roles listed on 2026-07-15.)
 - `market_expansion` +15 — New markets need new systems and local support. (Northwind Logistics expands into South East Asia with a new office in Singapore, announced on 2026-08-02.)
-- `partnership` +10 — An alliance footprint shows appetite to work with outside vendors. (Northwind Logistics partners with PortLink to integrate real-time container tracking, announced 2026-05-20.)
 
 ## What changed
 - first run for this account, nothing to compare against

@@ -1,8 +1,8 @@
 # Watchlist digest
 
-Generated 2026-11-16T09:21:48+00:00 · sources: fixture · extractor: baseline
+Generated 2026-11-17T10:28:40+00:00 · sources: fixture · extractor: baseline
 
-## Northwind Logistics — 75 (High) · first run
+## Northwind Logistics — 65 (High) · first run
 
 
 ## Helio Airways — 50 (Medium) · first run
