@@ -1,6 +1,6 @@
 # Atlas Freight Systems
 
-*Run `atlas-freight-systems_20261120-095422-388` · 2026-11-20T09:54:22.393056+00:00 · source: fixture*
+*Run `atlas-freight-systems_20261123-103445-262` · 2026-11-23T10:34:45.268791+00:00 · source: fixture*
 
 **Signal score 0 (Low)**
 

@@ -1,6 +1,6 @@
 # Verdant Hospitality
 
-*Run `verdant-hospitality_20261120-095422-372` · 2026-11-20T09:54:22.378249+00:00 · source: fixture*
+*Run `verdant-hospitality_20261123-103445-240` · 2026-11-23T10:34:45.248599+00:00 · source: fixture*
 
 **Signal score 10 (Low)**
 
