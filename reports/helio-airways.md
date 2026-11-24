@@ -1,10 +1,10 @@
 # Helio Airways
 
-*Run `helio-airways_20261123-103445-228` · 2026-11-23T10:34:45.237884+00:00 · source: fixture*
+*Run `helio-airways_20261124-121739-042` · 2026-11-24T12:17:39.051354+00:00 · source: fixture*
 
-**Signal score 50 (Medium)**
+**Signal score 25 (Low)**
 
-Helio Airways: 4 verified fact(s) across company profile, leadership change, product launch, tech stack. Signal score 50 (Medium). Every statement below links to the source it was read from.
+Helio Airways: 4 verified fact(s) across company profile, leadership change, product launch, tech stack. Signal score 25 (Low). Every statement below links to the source it was read from.
 
 ## Verified facts
 - **company profile** (2026-02-20) — Helio Airways is a regional carrier based in Lisbon, flying 34 aircraft on short-haul routes across southern Europe.  
@@ -17,7 +17,6 @@ Helio Airways: 4 verified fact(s) across company profile, leadership change, pro
   <https://helioairways.example/technology> · support 1.0
 
 ## Why this score
-- `leadership_change` +25 — New leaders re-evaluate vendors in their first two quarters. (Helio Airways appointed Marta Ferreira as Chief Information Officer on 2026-08-25.)
 - `product_launch` +15 — A launch creates operational load they may need help with. (Helio Airways launched a self-service rebooking app for disrupted passengers on 2026-09-01.)
 - `tech_overlap` +10 — A known stack means a shorter integration conversation. (Helio Airways runs on an Amadeus passenger service system, with a cloud data warehouse for operations reporting.)
 
