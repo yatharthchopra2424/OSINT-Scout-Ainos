@@ -1,6 +1,6 @@
 # Castor Telecom
 
-*Run `castor-telecom_20261126-104128-733` · 2026-11-26T10:41:28.743477+00:00 · source: fixture*
+*Run `castor-telecom_20261127-104318-331` · 2026-11-27T10:43:18.336544+00:00 · source: fixture*
 
 **Signal score 20 (Low)**
 
